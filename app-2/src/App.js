@@ -1,23 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react';
+import List from './List';
+import axios from 'axios';
+
 
 function App() {
+  const [swapiPeople, setSwapiPeople] = useState([]);
+
+  useEffect(async () => {
+    try {
+      const { data } = await axios.get(`https://swapi.dev/api/people`);
+      let names = data.results.map(element => element.name)  //map to an array of just names
+      setSwapiPeople(names)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <List list={swapiPeople} />
     </div>
   );
 }
